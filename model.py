@@ -332,7 +332,7 @@ class Minkowski_2(Distance):
         ...
 
     @staticmethod
-    @abc.abstractstaticmethod
+    @abc.abstractmethod
     def reduction(values: Iterable[float]) -> float:
         ...
 
@@ -376,7 +376,7 @@ class ED2(Minkowski_2):
 
 class ED2S(Minkowski_2):
     m = 2
-    reduction = sum  # type: ignore [assignment]
+    reduction = sum
 
 
 class Hyperparameter:
@@ -386,7 +386,7 @@ class Hyperparameter:
         self.k = k
         self.algorithm = algorithm
         self.data: weakref.ReferenceType["TrainingData"] = weakref.ref(training)
-        self.quality: float
+        self.quality: float = 0.0
 
     def test(self) -> None:
         """Run the entire test suite."""
