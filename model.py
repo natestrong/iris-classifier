@@ -1,5 +1,6 @@
+import datetime
 import weakref
-from typing import Optional
+from typing import Optional, Iterable
 
 
 class Sample:
@@ -61,3 +62,46 @@ class Hyperparameter:
             else:
                 fail_count += 1
             self.quality = pass_count / (pass_count + fail_count)
+
+
+class TrainingData:
+    """A set of training and testing data with methods to load and test the samples."""
+
+    def __init__(self, name: str) -> None:
+        self.name = name
+        self.uploaded: Optional[datetime.datetime] = None
+        self.tested: Optional[datetime.datetime] = None
+        self.training: list[Sample] = []
+        self.testing: list[Sample] = []
+        self.tuning: list[Hyperparameter] = []
+
+    def load(
+            self,
+            raw_data_source: Iterable[dict[str, str]]
+    ) -> None:
+        """Load and partition the raw data"""
+        for n, row in enumerate(raw_data_source):
+            # ... filter and extract subsets (See Chapter 6)
+            # ... Create self.training and self.testing subsets
+            pass
+
+        self.uploaded = datetime.datetime.now(tz=datetime.timezone.utc)
+
+    def test(
+            self,
+            parameter: Hyperparameter
+    ) -> None:
+        """Test this Hyperparameter value."""
+        parameter.test()
+        self.tuning.append(parameter)
+        self.tested = datetime.datetime.now(tz=datetime.timezone.utc)
+
+    def classify(
+            self,
+            parameter: Hyperparameter,
+            sample: Sample
+    ) -> Sample:
+        """Classify a sample using the given Hyperparameter"""
+        classification = parameter.classify(sample)
+        sample.classify(classification)
+        return sample
